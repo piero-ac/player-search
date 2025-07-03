@@ -1,8 +1,69 @@
+import { useQuery } from "@tanstack/react-query";
+import Search from "./components/Search";
+import { useState } from "react";
+
 function App() {
+  const [name, setName] = useState("Mbappe");
+  const { data, isError, error, isPending } = useQuery({
+    queryKey: ["players", name],
+    queryFn: async (): Promise<PlayerResponse> => {
+      const res = await fetch(
+        `https://v3.football.api-sports.io/players/profiles?search=${name}`,
+        {
+          method: "GET",
+          headers: {
+            "x-rapidapi-host": "v3.football.api-sports.io",
+            "x-rapidapi-key": import.meta.env.VITE_API_FOOTBALL_KEY,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Could not fetch data");
+      }
+
+      const data = await res.json();
+      // console.log(data);
+      return data;
+    },
+    staleTime: 50000,
+  });
+
+  let content;
+
+  if (isError) {
+    content = <p>Something went wrong. {error.message}</p>;
+  }
+
+  if (isPending) {
+    content = <p>Searching....</p>;
+  }
+
+  if (data) {
+    console.log(data.response);
+    content = (
+      <>
+        <p>{data.results}</p>
+        <p>player found</p>
+        <div>
+          {data.response.map((p) => (
+            <p key={p.player.id}>{p.player.name}</p>
+          ))}
+        </div>
+      </>
+    );
+  }
+
   return (
-    <>
-      <h1>Hello</h1>
-    </>
+    <div className="bg-gray-800 h-screen text-gray-200">
+      <h1 className="pt-5 text-center text-2xl font-bold">
+        FOOTBALL PLAYER SEARCH
+      </h1>
+      <div className="mt-4 p-4 bg-gray-600">
+        <Search submit={(playerName) => setName(playerName)} />
+      </div>
+      <div>{content}</div>
+    </div>
   );
 }
 
