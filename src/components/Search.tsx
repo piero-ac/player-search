@@ -13,7 +13,10 @@ export default function Search({ submit }: SearchProps) {
   }
 
   return (
-    <form className="text-center" action={handleSubmit}>
+    <form
+      className="text-center flex flex-row items-center justify-center"
+      action={handleSubmit}
+    >
       <input
         className="bg-gray-50 px-2 rounded h-[40px] w-[200px] text-black"
         type="text"
@@ -23,7 +26,7 @@ export default function Search({ submit }: SearchProps) {
         maxLength={30}
         required
       />
-      <button type="submit">
+      <button className="ml-3 bg-gray-500 p-3 rounded" type="submit">
         <CiSearch />
       </button>
     </form>
