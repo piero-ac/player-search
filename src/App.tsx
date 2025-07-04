@@ -4,7 +4,7 @@ import { useState } from "react";
 import PlayerCard from "./components/PlayerCard";
 
 function App() {
-  const [name, setName] = useState("Mbappe");
+  const [name, setName] = useState("");
   const { data, isError, error, isPending } = useQuery({
     queryKey: ["players", name],
     queryFn: async (): Promise<PlayerResponse> => {
@@ -28,6 +28,7 @@ function App() {
       return data;
     },
     staleTime: 50000,
+    enabled: !!name,
   });
 
   let content;
@@ -38,6 +39,14 @@ function App() {
 
   if (isPending) {
     content = <p>Searching....</p>;
+  }
+
+  if (!name) {
+    content = (
+      <h2 className="text-center uppercase font-bold">
+        Type a name in the search bar!
+      </h2>
+    );
   }
 
   if (data) {
