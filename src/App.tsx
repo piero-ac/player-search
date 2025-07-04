@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Search from "./components/Search";
 import { useState } from "react";
+import PlayerCard from "./components/PlayerCard";
 
 function App() {
   const [name, setName] = useState("Mbappe");
@@ -42,15 +43,17 @@ function App() {
   if (data) {
     console.log(data.response);
     content = (
-      <>
-        <p>{data.results}</p>
-        <p>player found</p>
-        <div>
+      <div className="p-4">
+        <div className="flex flex-row gap-2 items-center justify-center">
+          <p>Searched: {name}</p>
+          <p>Found {data.results} players</p>
+        </div>
+        <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 max-w-[900px] mx-auto">
           {data.response.map((p) => (
-            <p key={p.player.id}>{p.player.name}</p>
+            <PlayerCard key={p.player.id} player={p} />
           ))}
         </div>
-      </>
+      </div>
     );
   }
 
