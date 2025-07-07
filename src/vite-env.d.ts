@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 interface PlayerProfile {
   player: {
-    id: string;
+    id: string | number;
     name: string | null;
     firstname: string | null;
     lastname: string | null;
